@@ -1,4 +1,4 @@
-import { Show } from 'solid-js'
+import { createEffect, Show } from 'solid-js'
 import IconEnv from './icons/Env'
 import type { Accessor, Setter } from 'solid-js'
 
@@ -17,7 +17,12 @@ export default (props: Props) => {
     props.setCurrentSystemRoleSettings(systemInputRef.value)
     props.setSystemRoleEditing(false)
   }
-
+ createEffect(() => {
+    if (props.systemRoleEditing() && !props.currentSystemRoleSettings()) {
+      systemInputRef.value = '你是 ChatGPT，一个由 OpenAI 训练的大型语言模型。请仔细遵循用户的指示回答。';
+      props.setCurrentSystemRoleSettings(systemInputRef.value)
+    }
+  });
   return (
     <div class="my-4">
       <Show when={!props.systemRoleEditing()}>
